@@ -1,0 +1,21 @@
+<app-navbar></app-navbar>
+
+<div class="edit-container">
+  <h2>{{ id ? 'Chỉnh sửa công việc' : 'Tạo công việc mới' }}</h2>
+
+  <form (ngSubmit)="save()">
+    <label>Tiêu đề</label>
+    <input type="text" [(ngModel)]="task.title" name="title" required>
+
+    <label>Mô tả</label>
+    <textarea [(ngModel)]="task.description" name="description"></textarea>
+
+    <label>Ngày</label>
+    <input type="datetime-local" [(ngModel)]="task.date" name="date">
+
+    <button class="primary-btn" type="submit">
+      {{ id ? 'Cập nhật' : 'Tạo mới' }}
+    </button>
+    <a routerLink="/tasks" class="cancel">Hủy</a>
+  </form>
+</div>

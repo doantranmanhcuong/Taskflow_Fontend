@@ -1,0 +1,47 @@
+<app-navbar></app-navbar>
+
+<div class="task-container">
+
+  <div class="header">
+    <h2>Công việc của bạn</h2>
+    <button routerLink="/tasks/create" class="primary-btn">+ Tạo task</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Đang tải...</div>
+
+  <!-- SECTION: TODO -->
+  <h3>Cần làm</h3>
+  <div class="task-list">
+    <div class="task-card" *ngFor="let t of todo">
+      <div class="left">
+        <input type="checkbox" (change)="markDone(t.id)">
+        <div>
+          <h4>{{ t.title }}</h4>
+          <p>{{ t.description }}</p>
+        </div>
+      </div>
+
+      <div class="right">
+        <small>{{ t.date | date: 'dd/MM/yyyy HH:mm' }}</small>
+        <a routerLink="/tasks/{{ t.id }}/edit" class="edit-btn">Sửa</a>
+        <button (click)="deleteTask(t.id)" class="delete-btn">X</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: DONE -->
+  <h3>Đã hoàn thành</h3>
+  <div class="task-list">
+    <div class="task-card done" *ngFor="let t of done">
+      <div class="left">
+        <input type="checkbox" checked>
+        <div>
+          <h4>{{ t.title }}</h4>
+        </div>
+      </div>
+      <div class="right">
+        <small>{{ t.date | date: 'dd/MM/yyyy HH:mm' }}</small>
+      </div>
+    </div>
+  </div>
+</div>

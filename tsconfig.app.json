@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/features/tasks/pages/task-edit/task-edit.component.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

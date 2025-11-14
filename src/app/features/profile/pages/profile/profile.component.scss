@@ -1,0 +1,88 @@
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+
+  .back {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  .loading {
+    text-align: center;
+    font-size: 14px;
+    color: #6b7280;
+  }
+}
+
+.profile-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+
+  .avatar {
+    width: 90px;
+    height: 90px;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 16px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .email {
+    color: #6b7280;
+    margin-bottom: 24px;
+  }
+
+  form {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    label {
+      font-size: 14px;
+      color: #374151;
+    }
+
+    input {
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .primary-btn {
+      margin-top: 10px;
+      background: #2563eb;
+      color: white;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      color: #16a34a;
+      font-size: 14px;
+    }
+  }
+}

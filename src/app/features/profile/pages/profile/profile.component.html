@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+
+  <a routerLink="/tasks" class="back">← Quay lại</a>
+
+  <div *ngIf="loading" class="loading">Đang tải...</div>
+
+  <div *ngIf="!loading && user" class="profile-box">
+
+    <div class="avatar">
+      {{ user.fullName?.[0] | uppercase }}
+    </div>
+
+    <h2>{{ user.fullName }}</h2>
+    <p class="email">{{ user.email }}</p>
+
+    <form (ngSubmit)="save()">
+
+      <label>Họ và tên</label>
+      <input type="text" [(ngModel)]="user.fullName" name="fullName" required>
+
+      <label>Email</label>
+      <input type="email" [(ngModel)]="user.email" name="email" required>
+
+      <button type="submit" class="primary-btn" [disabled]="saving">
+        {{ saving ? 'Đang lưu...' : 'Lưu thay đổi' }}
+      </button>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+
+    </form>
+
+  </div>
+</div>
