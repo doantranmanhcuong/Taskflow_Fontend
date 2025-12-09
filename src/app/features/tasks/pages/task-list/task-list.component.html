@@ -1,47 +1,61 @@
 <app-navbar></app-navbar>
 
 <div class="task-container">
-
   <div class="header">
     <h2>Công việc của bạn</h2>
-    <button routerLink="/tasks/create" class="primary-btn">+ Tạo task</button>
+    <button mat-raised-button color="primary" routerLink="/tasks/create" class="primary-btn">+ Tạo task</button>
   </div>
 
-  <div *ngIf="loading" class="loading">Đang tải...</div>
+  <mat-spinner diameter="50" *ngIf="loading" class="loading-spinner"></mat-spinner>
 
   <!-- SECTION: TODO -->
   <h3>Cần làm</h3>
-  <div class="task-list">
-    <div class="task-card" *ngFor="let t of todo">
-      <div class="left">
-        <input type="checkbox" (change)="markDone(t.id)">
-        <div>
-          <h4>{{ t.title }}</h4>
-          <p>{{ t.description }}</p>
+  <div class="task-list" *ngIf="!loading">
+    <mat-card class="task-card" *ngFor="let t of todo" appearance="outlined">
+      <mat-card-content>
+        <div class="task-content">
+          <mat-checkbox (change)="markDone(t._id)" [checked]="false">Hoàn thành</mat-checkbox>
+          <div class="task-details">
+            <h4>{{ t.title }}</h4>
+            <p *ngIf="t.description">{{ t.description }}</p>
+            <div class="meta">
+              <span class="priority-badge priority-{{ t.priority }}">{{ t.priority | titlecase }}</span>
+              <small class="due-date">{{ t.dueDate | date: 'dd/MM/yyyy' }}</small>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="right">
-        <small>{{ t.date | date: 'dd/MM/yyyy HH:mm' }}</small>
-        <a routerLink="/tasks/{{ t.id }}/edit" class="edit-btn">Sửa</a>
-        <button (click)="deleteTask(t.id)" class="delete-btn">X</button>
-      </div>
-    </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button routerLink="/tasks/{{ t._id }}/edit" class="edit-btn">Sửa</a>
+        <button mat-icon-button (click)="deleteTask(t._id)" class="delete-btn" matTooltip="Xóa">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 
   <!-- SECTION: DONE -->
   <h3>Đã hoàn thành</h3>
-  <div class="task-list">
-    <div class="task-card done" *ngFor="let t of done">
-      <div class="left">
-        <input type="checkbox" checked>
-        <div>
-          <h4>{{ t.title }}</h4>
+  <div class="task-list" *ngIf="!loading">
+    <mat-card class="task-card done" *ngFor="let t of done" appearance="outlined">
+      <mat-card-content>
+        <div class="task-content">
+          <mat-checkbox [checked]="true" disabled>Hoàn thành</mat-checkbox>
+          <div class="task-details">
+            <h4 class="completed-title">{{ t.title }}</h4>
+            <div class="meta">
+              <span class="priority-badge priority-{{ t.priority }}">{{ t.priority | titlecase }}</span>
+              <small class="due-date">{{ t.dueDate | date: 'dd/MM/yyyy' }}</small>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="right">
-        <small>{{ t.date | date: 'dd/MM/yyyy HH:mm' }}</small>
-      </div>
-    </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button routerLink="/tasks/{{ t._id }}/edit" class="edit-btn">Sửa</a>
+        <button mat-icon-button (click)="deleteTask(t._id)" class="delete-btn" matTooltip="Xóa">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>

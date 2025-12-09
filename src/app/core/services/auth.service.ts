@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';  // Optional cho logout redirect
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private api: ApiService) {}
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());  // Reactive state
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  login(payload: { email: string; password: string }) {
+  constructor(private api: ApiService, private router?: Router) {}  // Router optional
+
+  login(payload: { email: string; password: string }): Observable<any> {
     return this.api.post<any>('/auth/login', payload).pipe(
       tap((res) => {
-        if (res?.accessToken) {
-          localStorage.setItem('token', res.accessToken);
+        if (res?.access_token) {  // Fix: access_token từ BE response
+          localStorage.setItem('token', res.access_token);
+          this.isLoggedInSubject.next(true);
         }
       })
     );
@@ -22,9 +27,9 @@ export class AuthService {
     fullName: string;
     email: string;
     password: string;
-  }) {
+  }): Observable<any> {
     return this.api.post<any>('/auth/register', {
-      name: payload.fullName,  
+      name: payload.fullName,
       email: payload.email,
       password: payload.password,
     });
@@ -32,9 +37,17 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    this.isLoggedInSubject.next(false);
+    if (this.router) {  // Optional redirect login
+      this.router.navigate(['/login']);
+    }
   }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }

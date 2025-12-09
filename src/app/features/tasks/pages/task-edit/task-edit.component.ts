@@ -8,7 +8,7 @@ import { TasksService } from '../../../../core/services/tasks.service';
 @Component({
   selector: 'app-task-edit',
   standalone: true,
-  imports: [FormsModule, NgIf, RouterLink, NavbarComponent],
+  imports: [FormsModule, RouterLink, NavbarComponent],
   templateUrl: './task-edit.component.html',
   styleUrls: ['./task-edit.component.scss']
 })
