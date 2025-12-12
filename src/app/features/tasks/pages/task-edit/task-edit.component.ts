@@ -18,7 +18,7 @@ export class TaskEditComponent implements OnInit {
     title: '', 
     description: '', 
     date: '',
-    time: '' // THÊM field time
+    time: '' 
   };
   loading = false;
 
@@ -41,7 +41,7 @@ export class TaskEditComponent implements OnInit {
               title: res.title || '',
               description: res.description || '',
               date: this.formatDateForInput(res.date),
-              time: this.formatTimeForInput(res.time) // Format time
+              time: this.formatTimeForInput(res.time) 
             };
           }
           this.loading = false;

@@ -164,7 +164,6 @@ export class ApiService {
           break;
         case 401:
           errorMessage = 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
-          // Có thể trigger logout ở đây
           break;
         case 403:
           errorMessage = 'Bạn không có quyền truy cập tài nguyên này';

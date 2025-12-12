@@ -8,7 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgIf], // Chỉ có NgIf, không có AsyncPipe
+  imports: [RouterLink, NgIf], 
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })

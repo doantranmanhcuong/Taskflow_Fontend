@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
     NgIf, NgFor, DatePipe, TitleCasePipe, SlicePipe,
     RouterLink,
     MatCardModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule, CommonModule,
-    MatSnackBarModule, // THÊM
+    MatSnackBarModule, 
     NavbarComponent
   ],
   templateUrl: './task-list.component.html',
@@ -30,7 +30,7 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private tasks: TasksService,
-    private snackBar: MatSnackBar // THÊM
+    private snackBar: MatSnackBar 
   ) {}
 
   ngOnInit(): void {  
@@ -71,7 +71,7 @@ export class TaskListComponent implements OnInit {
 toggleTaskStatus(task: any): void {  
   const taskId = task.id || task._id;
   
-  // ✅ SỬA: Kiểm tra hoa/thường
+  // SỬA: Kiểm tra hoa/thường
   const isCompleted = task.status && 
                      task.status.toLowerCase() === 'completed';
   

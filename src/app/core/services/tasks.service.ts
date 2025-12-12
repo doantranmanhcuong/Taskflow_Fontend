@@ -61,13 +61,13 @@ export class TasksService {
   }
 
   markAsCompleted(id: string) {
-  console.log('📡 Service: markAsCompleted for ID:', id);
+  console.log(' Service: markAsCompleted for ID:', id);
   return this.api.patch<any>(`/tasks/${id}/complete`, {}).pipe(
     tap(response => {
-      console.log('📡 Service Response:', response);
+      console.log(' Service Response:', response);
     }),
     catchError(err => {
-      console.error('📡 Service Error:', err);
+      console.error(' Service Error:', err);
       return of(null);
     })
   );
