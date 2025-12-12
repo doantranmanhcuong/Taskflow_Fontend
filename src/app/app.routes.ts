@@ -1,4 +1,6 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,10 +17,14 @@ export const routes: Routes = [
     path: 'tasks',
     loadChildren: () =>
       import('./features/tasks/tasks.routes').then(m => m.TASKS_ROUTES),
+    canActivate: [AuthGuard] // Thêm guard cho tasks
   },
   {
     path: 'profile',
     loadChildren: () =>
       import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+    canActivate: [AuthGuard] // Thêm guard cho profile
   },
+  // Route mặc định
+  { path: '**', redirectTo: '' }
 ];

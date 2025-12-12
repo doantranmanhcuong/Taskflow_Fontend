@@ -1,41 +1,25 @@
+// File: src/app/core/services/tasks.service.ts
+// ĐẢM BẢO export đúng tên class là 'TasksService'
+
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { catchError, map, of } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TasksService {
+export class TasksService {  
   constructor(private api: ApiService) {}
 
   getTasks() {
     return this.api.get<any>('/tasks').pipe(
       map(response => {
-        console.log('Full API response:', JSON.stringify(response, null, 2));  
-
-        if (response && response.data && Array.isArray(response.data)) {
-          return response.data;
-        } else if (response && response.tasks && Array.isArray(response.tasks)) {
-          return response.tasks;
-        } else if (response && response.results && Array.isArray(response.results)) {
-          return response.results;
-        } else if (Array.isArray(response)) {
-          return response;
-        } else if (response && typeof response === 'object' && Object.keys(response).length > 0) {
-          const keys = Object.keys(response);
-          if (keys.every(key => !isNaN(Number(key)))) {
-            const array = keys.map(key => response[key]);
-            console.log('Converted object to array:', array);
-            return array;
-          }
-        }
-
-        console.error('Unexpected response format:', response);  
-        return []; 
+        console.log('Full API response:', response);
+        return response?.data || [];
       }),
       catchError(err => {
         console.error('Get tasks error:', err);
-        return of([]);  
+        return of([]);
       })
     );
   }
@@ -76,10 +60,23 @@ export class TasksService {
     );
   }
 
-  markDone(id: string) {
-    return this.api.put<any>(`/tasks/${id}/done`, {}).pipe(
+  markAsCompleted(id: string) {
+  console.log('📡 Service: markAsCompleted for ID:', id);
+  return this.api.patch<any>(`/tasks/${id}/complete`, {}).pipe(
+    tap(response => {
+      console.log('📡 Service Response:', response);
+    }),
+    catchError(err => {
+      console.error('📡 Service Error:', err);
+      return of(null);
+    })
+  );
+}
+
+  markAsIncomplete(id: string) {
+    return this.api.patch<any>(`/tasks/${id}/incomplete`, {}).pipe(
       catchError(err => {
-        console.error('Mark done error:', err);
+        console.error('Mark as incomplete error:', err);
         return of(null);
       })
     );
