@@ -1,0 +1,41 @@
+<nav class="navbar">
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <a routerLink="/">TaskFlow</a>
+    </div>
+
+    <div class="links">
+      <!-- Nếu CHƯA đăng nhập -->
+      <ng-container *ngIf="!loggedIn; else loggedTemplate">
+        <a routerLink="/auth/login" class="nav-link">Đăng nhập</a>
+        <button routerLink="/auth/register" class="btn-primary">Bắt đầu</button>
+      </ng-container>
+
+      <!-- Nếu ĐÃ đăng nhập -->
+      <ng-template #loggedTemplate>
+        <a routerLink="/tasks" class="nav-link">Công việc</a>
+        <a routerLink="/tasks/calendar" class="nav-link">Lịch biểu</a>
+        
+        <!-- User profile link -->
+        <div class="user-profile">
+          <a routerLink="/profile" class="nav-link user-link">
+            <span class="user-avatar">
+              {{ getAvatarInitial() }}
+            </span>
+            <span class="user-name" *ngIf="userName">
+              {{ userName }}
+            </span>
+            <span class="user-name" *ngIf="!userName">
+              Hồ sơ
+            </span>
+          </a>
+        </div>
+        
+        <button (click)="logout()" class="btn-logout">
+          Đăng xuất
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</nav>

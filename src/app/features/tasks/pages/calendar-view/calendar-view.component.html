@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+
+<div class="calendar-wrapper">
+  
+  <div class="custom-toolbar">
+    
+  
+
+    <div class="center-group">
+      <mat-form-field appearance="outline" class="date-picker-field">
+        <mat-label>Chọn ngày xem lịch</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="currentDate" (dateChange)="onDateSelected($event)">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="right-group">
+      <h2 class="current-date-display">{{ currentDate | date:'dd/MM/yyyy' }}</h2>
+    </div>
+
+  </div>
+  
+  <div class="calendar-card">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+</div>

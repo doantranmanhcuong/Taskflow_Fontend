@@ -1,0 +1,123 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+  <!-- Nút quay lại -->
+  <a routerLink="/tasks" class="back">← Quay lại</a>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    Đang tải thông tin...
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage && !loading" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Profile content -->
+  <div *ngIf="!loading && user" class="profile-box">
+    <!-- Avatar -->
+    <div class="avatar" [style.background]="'#' + (user.id * 1000).toString(16).substring(0,6)">
+      {{ getAvatarInitial() }}
+    </div>
+
+    <!-- Thông tin cơ bản -->
+    <h2>{{ user.name }}</h2>
+    <p class="email">{{ user.email }}</p>
+
+    <!-- Success message -->
+    <div *ngIf="message && !isEditing" class="success-message">
+      {{ message }}
+    </div>
+
+    <!-- Form chỉnh sửa -->
+    <form [formGroup]="profileForm" (ngSubmit)="save()" *ngIf="isEditing; else viewMode">
+      
+      <!-- Họ và tên -->
+      <div class="form-group">
+        <label for="name">Họ và tên *</label>
+        <input 
+          id="name" 
+          type="text" 
+          formControlName="name"
+          [class.invalid]="shouldShowError('name')"
+          placeholder="Nhập họ và tên"
+        >
+        <div *ngIf="shouldShowError('name')" class="validation-error">
+          <span *ngIf="profileForm.get('name')?.errors?.['required']">Họ và tên là bắt buộc</span>
+          <span *ngIf="profileForm.get('name')?.errors?.['minlength']">Tên phải có ít nhất 2 ký tự</span>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input 
+          id="email" 
+          type="email" 
+          formControlName="email"
+          [class.invalid]="shouldShowError('email')"
+          placeholder="Nhập email"
+        >
+        <div *ngIf="shouldShowError('email')" class="validation-error">
+          <span *ngIf="profileForm.get('email')?.errors?.['required']">Email là bắt buộc</span>
+          <span *ngIf="profileForm.get('email')?.errors?.['email']">Email không hợp lệ</span>
+        </div>
+      </div>
+
+      <!-- Buttons khi đang chỉnh sửa -->
+      <div class="button-group">
+        <button 
+          type="submit" 
+          class="primary-btn" 
+          [disabled]="saving || profileForm.invalid"
+        >
+          {{ saving ? 'Đang lưu...' : 'Lưu thay đổi' }}
+        </button>
+        <button 
+          type="button" 
+          class="cancel-btn" 
+          (click)="toggleEdit()" 
+          [disabled]="saving"
+        >
+          Hủy
+        </button>
+      </div>
+
+      <!-- Error message khi submit -->
+      <div *ngIf="errorMessage && isEditing" class="error-message-inline">
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <!-- Chế độ xem (không chỉnh sửa) -->
+    <ng-template #viewMode>
+      <div class="info-section">
+        <div class="info-item">
+          <strong>Họ và tên:</strong> {{ user.name }}
+        </div>
+        <div class="info-item">
+          <strong>Email:</strong> {{ user.email }}
+        </div>
+        <div *ngIf="user.phone" class="info-item">
+          <strong>Số điện thoại:</strong> {{ user.phone }}
+        </div>
+        <div *ngIf="user.createdAt" class="info-item">
+          <strong>Ngày tham gia:</strong> {{ formatDate(user.createdAt) }}
+        </div>
+
+        <div *ngIf="user.updatedAt" class="info-item">
+          <strong>Cập nhật lần cuối:</strong> {{ formatDate(user.updatedAt) }}
+        </div>
+      </div>
+
+      <!-- Buttons khi đang xem -->
+      <div class="button-group">
+        <button type="button" class="edit-btn" (click)="toggleEdit()">
+          Chỉnh sửa thông tin
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

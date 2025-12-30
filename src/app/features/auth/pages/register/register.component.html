@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <div class="auth-box">
+    <h2>Tạo tài khoản TaskFlow</h2>
+
+    <form (ngSubmit)="submit()">
+      <label>Họ và tên</label>
+      <input type="text" [(ngModel)]="fullName" name="fullName" required>
+
+      <label>Email</label>
+      <input type="email" [(ngModel)]="email" name="email" required>
+
+      <label>Mật khẩu</label>
+      <input type="password" [(ngModel)]="password" name="password" required>
+
+      <label>Xác nhận mật khẩu</label>
+      <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+
+      <button type="submit" class="primary-btn" [disabled]="loading">
+        {{ loading ? 'Đang tạo tài khoản...' : 'Tạo tài khoản' }}
+      </button>
+    </form>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <p class="text">
+      Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập ngay</a>
+    </p>
+  </div>
+</div>

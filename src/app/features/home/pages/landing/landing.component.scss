@@ -1,0 +1,52 @@
+.hero {
+  text-align: center;
+  margin-top: 80px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1b1d21;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #4b5563;
+    margin-bottom: 24px;
+  }
+
+  .primary-btn {
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+}
+
+.features-section {
+  max-width: 1120px;
+  margin: 80px auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+
+  .item {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    font-size: 15px;
+  }
+}
+
+footer {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 13px;
+}

@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+
+<div class="edit-container">
+  <h2>{{ id ? 'Chỉnh sửa công việc' : 'Tạo công việc mới' }}</h2>
+
+  <form (ngSubmit)="save()" #taskForm="ngForm">
+    <div class="form-group">
+      <label for="title">Tiêu đề *</label>
+      <input 
+        id="title"
+        type="text" 
+        [(ngModel)]="task.title" 
+        name="title" 
+        required
+        class="form-control"
+        #titleInput="ngModel"
+      >
+      <div *ngIf="titleInput.invalid && titleInput.touched" class="error-message">
+        Tiêu đề là bắt buộc
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Mô tả</label>
+      <textarea 
+        id="description"
+        [(ngModel)]="task.description" 
+        name="description"
+        class="form-control"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="datetime-group">
+      <!-- Ngày -->
+      <div class="form-group">
+        <label for="date">Ngày *</label>
+        <input 
+          id="date"
+          type="date" 
+          [(ngModel)]="task.date" 
+          name="date"
+          required
+          class="form-control"
+          #dateInput="ngModel"
+        >
+        <small>Định dạng: yyyy-mm-dd</small>
+        <div *ngIf="dateInput.invalid && dateInput.touched" class="error-message">
+          Ngày là bắt buộc
+        </div>
+      </div>
+
+      <!-- Giờ -->
+      <div class="form-group">
+        <label for="time">Giờ</label>
+        <input
+          id="time"
+          type="time" 
+          [(ngModel)]="task.time" 
+          name="time"
+          class="form-control"
+          step="300"
+        >
+        <small>Định dạng: HH:mm (24h)</small>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button 
+        class="primary-btn" 
+        type="submit"
+        [disabled]="taskForm.invalid || !task.date"
+      >
+        {{ id ? 'Cập nhật' : 'Tạo mới' }}
+      </button>
+      <a routerLink="/tasks" class="cancel">Hủy</a>
+    </div>
+
+   
+  </form>
+</div>

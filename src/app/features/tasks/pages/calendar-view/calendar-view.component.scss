@@ -1,0 +1,46 @@
+.calendar-wrapper {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .custom-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+
+    .back-btn {
+      padding: 8px 16px;
+      background: #f1f3f4;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      &:hover { background: #e0e0e0; }
+    }
+
+    .date-picker-field {
+      width: 250px;
+      margin-bottom: -20px; 
+    }
+
+    .current-date-display {
+      margin: 0;
+      color: #3f51b5;
+      font-weight: 600;
+    }
+  }
+
+  .calendar-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    // Đảm bảo chiều cao đủ lớn để scroll giờ
+    min-height: 600px; 
+  }
+}

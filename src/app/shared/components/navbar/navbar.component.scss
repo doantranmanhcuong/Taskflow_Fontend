@@ -1,0 +1,146 @@
+.navbar {
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 14px 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo a {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #1d4ed8;
+    }
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .nav-link {
+      text-decoration: none;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #2563eb;
+        background-color: #f3f4f6;
+      }
+
+      &.user-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .user-name {
+          max-width: 120px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+
+      &:hover {
+        background: #1d4ed8;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+      }
+    }
+
+    .btn-logout {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+
+      &:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .navbar {
+    .container {
+      padding: 0 16px;
+    }
+
+    .links {
+      gap: 12px;
+
+      .user-name {
+        display: none; // Ẩn tên trên mobile
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    .links {
+      .nav-link:not(.user-link) {
+        display: none; // Ẩn text links, chỉ hiển thị icon/avatar
+      }
+
+      .user-link {
+        .user-name {
+          display: none;
+        }
+      }
+    }
+  }
+}

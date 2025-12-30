@@ -1,0 +1,138 @@
+.task-container {
+  max-width: 820px;
+  margin: 30px auto;
+  padding: 0 15px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .primary-btn {
+      background: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+  }
+
+  h3 {
+    margin: 24px 0 10px;
+    color: #374151;
+    font-size: 18px;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ===================== TASK CARD ====================== */
+  .task-card {
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: white;
+
+    .task-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    mat-checkbox {
+      transform: scale(1.1);
+      margin-top: 4px;
+    }
+
+    .task-details {
+      flex: 1;
+
+      h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 4px 0 6px;
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+
+        small {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: #f3f4f6;
+          padding: 2px 8px;
+          font-size: 12px;
+          border-radius: 8px;
+          color: #555;
+        }
+
+        .completed-date {
+          background: #e8f5e9;
+          color: #2e7d32;
+          font-weight: 500;
+        }
+
+        .original-due {
+          background: #fff3e0;
+          color: #f57c00;
+          font-weight: 500;
+        }
+      }
+    }
+
+    /* Actions */
+    mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 0;
+
+      .edit-btn {
+        color: #2563eb;
+        font-size: 14px;
+      }
+
+      .delete-btn {
+        color: #dc2626;
+      }
+    }
+
+    &.done {
+      background: #fafafa;
+      opacity: 0.9;
+
+      .task-details {
+        h4,
+        p {
+          text-decoration: line-through;
+          color: #777;
+        }
+      }
+    }
+  }
+
+  /* EMPTY */
+  .empty-state {
+    padding: 30px;
+    text-align: center;
+    font-style: italic;
+    color: #aaa;
+    background: #f9fafb;
+    border-radius: 10px;
+  }
+}
