@@ -34,4 +34,151 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* Add more global styles below if needed */
+/* =======================================================
+   CẤU HÌNH DARK MODE CHO TOÀN BỘ ỨNG DỤNG
+======================================================= */
+/* 1. Hiệu ứng chuyển màu mượt mà (Fade effect) */
+body, .task-card, .calendar-card, .navbar, .custom-toolbar, [class*="feature"], [class*="box"], [class*="card"], [class*="item"] {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 2. Giao diện khi Body bị gắn class .dark-theme (Tone Xám Xanh hiện đại) */
+body.dark-theme {
+  background-color: #111827 !important; /* Xám xanh tối, không bị đen kịt */
+  color: #f9fafb !important;          
+
+  /* =========================================
+     ĐỔI MÀU NỀN CÁC THẺ BAO BỌC
+  ========================================= */
+  .navbar,
+  .calendar-card,
+  .custom-toolbar,
+  .column,
+  .card,              
+  .feature-card,      
+  .feature-item,      
+  .info-box {         
+    background-color: #1f2937 !important; 
+    border-color: #374151 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    color: #f9fafb !important;
+  }
+
+  /* =========================================
+     SỬA LỖI CHỮ CHÌM TRÊN THANH HEADER (NAVBAR)
+  ========================================= */
+  .navbar {
+    .nav-link, .theme-btn, .user-name {
+      color: #f3f4f6 !important; 
+    }
+    
+    .nav-link:hover, .theme-btn:hover {
+      background-color: #374151 !important;
+      color: #60a5fa !important; 
+    }
+  }
+
+  /* =========================================
+     SỬA LỖI 4 Ô TRẮNG TÀNG HÌNH Ở TRANG CHỦ
+  ========================================= */
+  [class*="feature"],
+  [class*="box"],
+  [class*="card"],
+  [class*="item"] {
+    background-color: #1f2937 !important; 
+    border-color: #374151 !important;
+    color: #f9fafb !important;
+    
+    h3, h4, p {
+      color: #f9fafb !important; 
+    }
+  }
+
+  /* =========================================
+     THIẾT KẾ CARD CÔNG VIỆC
+  ========================================= */
+  .task-card {
+    background-color: #374151 !important; 
+    border-color: #4b5563 !important;
+    color: #e5e7eb !important;
+    
+    h3, h4 { color: #ffffff !important; }
+    p { color: #9ca3af !important; } 
+    
+    .meta small { 
+      background-color: #4b5563 !important; 
+      color: #e5e7eb !important; 
+    }
+    
+    &.done { 
+      background-color: #1f2937 !important; 
+      opacity: 0.6;
+    }
+  }
+
+  /* Đổi màu tiêu đề / Text chung */
+  h1, h2, h3, h4, .current-date-display {
+    color: #f3f4f6 !important;
+  }
+
+  /* =========================================
+     SỬA LỖI CHỮ BỊ CHÌM TRONG FORM VÀ PROFILE
+  ========================================= */
+  /* Sáng màu cho các thẻ Label, chữ nhỏ hướng dẫn */
+  label, 
+  .form-label, 
+  small, 
+  .text-muted, 
+  .help-text {
+    color: #d1d5db !important; 
+  }
+
+  /* Sáng màu chữ trong trang Profile */
+  .profile-container, 
+  .profile-card, 
+  .user-info, 
+  .details-section {
+    color: #f9fafb !important;
+    
+    span, p, strong, div {
+      color: #f9fafb !important;
+    }
+  }
+
+  /* Cấu hình các ô nhập văn bản (Input / Textarea) */
+  input, 
+  textarea, 
+  select, 
+  .form-control,
+  .mat-mdc-form-field-flex {
+    background-color: #374151 !important; 
+    color: #ffffff !important;           
+    border: 1px solid #4b5563 !important; 
+    
+    &::placeholder {
+      color: #9ca3af !important;
+    }
+  }
+
+  /* =========================================
+     GHI ĐÈ CSS CỦA LỊCH FULLCALENDAR
+  ========================================= */
+  .fc {
+    --fc-border-color: #374151 !important;
+    --fc-page-bg-color: #1f2937 !important;
+    --fc-today-bg-color: #374151 !important;
+    --fc-button-bg-color: #4b5563 !important;
+    --fc-button-text-color: #f9fafb !important;
+    
+    .fc-timegrid-axis-cushion, 
+    .fc-timegrid-slot-label-cushion {
+      color: #9ca3af !important;
+    }
+
+    .modern-event {
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      &.todo { background-color: #7f1d1d; color: #fecaca; border-color: #ef4444; }
+      &.done { background-color: #14532d; color: #bbf7d0; border-color: #22c55e; }
+    }
+  }
+}

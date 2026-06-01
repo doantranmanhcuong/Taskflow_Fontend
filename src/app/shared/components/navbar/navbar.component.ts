@@ -1,14 +1,19 @@
-// src/app/shared/components/navbar/navbar.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 
+// ✅ BƯỚC 1: Import thư viện Icon và ThemeService
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ThemeService } from '../../../core/services/theme.service';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgIf], 
+  // ✅ BƯỚC 2: Khai báo MatIconModule, MatButtonModule vào mảng imports
+  imports: [RouterLink, NgIf, MatIconModule, MatButtonModule], 
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
@@ -20,20 +25,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService, 
-    private router: Router
+    private router: Router,
+    public themeService: ThemeService // ✅ BƯỚC 3: Tiêm ThemeService (phải là public)
   ) {}
 
   ngOnInit(): void {
-    // Kiểm tra trạng thái ban đầu
     this.authSubscription = this.auth.isLoggedIn$.subscribe((isLoggedIn) => {
       this.loggedIn = isLoggedIn;  
     });
     this.userSubscription = this.auth.currentUser$.subscribe(user => {
       if (user) {
         this.userName = user.name;
-      }
-      else{
-        this.userName='';
+      } else {
+        this.userName = '';
       }
     });
   }
@@ -46,7 +50,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.userSubscription.unsubscribe();
     }
   }
-
 
   logout(): void {
     this.auth.logout().subscribe();

@@ -1,23 +1,24 @@
 <nav class="navbar">
   <div class="container">
-    <!-- Logo -->
     <div class="logo">
       <a routerLink="/">TaskFlow</a>
     </div>
 
     <div class="links">
-      <!-- Nếu CHƯA đăng nhập -->
+      
+      <button mat-icon-button (click)="themeService.toggleTheme()" class="theme-btn" title="Giao diện Sáng/Tối">
+        <mat-icon>{{ themeService.isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
       <ng-container *ngIf="!loggedIn; else loggedTemplate">
         <a routerLink="/auth/login" class="nav-link">Đăng nhập</a>
         <button routerLink="/auth/register" class="btn-primary">Bắt đầu</button>
       </ng-container>
 
-      <!-- Nếu ĐÃ đăng nhập -->
       <ng-template #loggedTemplate>
         <a routerLink="/tasks" class="nav-link">Công việc</a>
         <a routerLink="/tasks/calendar" class="nav-link">Lịch biểu</a>
         
-        <!-- User profile link -->
         <div class="user-profile">
           <a routerLink="/profile" class="nav-link user-link">
             <span class="user-avatar">

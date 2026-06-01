@@ -34,6 +34,17 @@
     align-items: center;
     gap: 20px;
 
+    /* ✅ CSS cho nút Theme */
+    .theme-btn {
+      color: #4b5563;
+      transition: all 0.2s;
+      
+      &:hover {
+        color: #2563eb;
+        background-color: #f3f4f6;
+      }
+    }
+
     .nav-link {
       text-decoration: none;
       color: #4b5563;
@@ -75,7 +86,7 @@
       }
     }
 
-    button {
+    button:not(.theme-btn) { /* Ẩn các class mặc định với nút icon */
       padding: 8px 16px;
       border: none;
       border-radius: 6px;

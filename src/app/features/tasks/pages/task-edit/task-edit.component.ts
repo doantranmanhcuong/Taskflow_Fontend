@@ -31,6 +31,7 @@ export class TaskEditComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     
     if (this.id) {
+      // ✅ GỌI API LẤY DỮ LIỆU CŨ KHI Ở CHẾ ĐỘ SỬA
       this.tasks.getTask(this.id).subscribe({
         next: (res) => {
           this.task = {
@@ -38,13 +39,15 @@ export class TaskEditComponent implements OnInit {
             description: res.description,
             date: this.formatDateForInput(res.date),
             time: this.formatTimeForInput(res.time)
-          }
+          };
         },
         error: (err) => {
+          console.error('Lỗi khi tải task:', err);
           alert('Không thể tải thông tin công việc');
         }
       });
     } else {
+      // ✅ XỬ LÝ KHỞI TẠO MẶC ĐỊNH CHO TẠO MỚI (TỪ LỊCH HOẶC NÚT TẠO)
       const params = this.route.snapshot.queryParams;
       this.task.date = params['date'] || this.getTodayDate();
       this.task.time = params['time'] || this.getCurrentTime();
@@ -73,7 +76,6 @@ export class TaskEditComponent implements OnInit {
     
     // Nếu time là string "HH:mm" hoặc "HH:mm:ss"
     if (typeof timeValue === 'string') {
-      // Lấy phần HH:mm
       const match = timeValue.match(/^(\d{1,2}):(\d{2})/);
       if (match) {
         const hours = ('0' + match[1]).slice(-2);
@@ -118,11 +120,12 @@ export class TaskEditComponent implements OnInit {
       alert('Vui lòng chọn ngày');
       return;
     }
+
     const request$ = this.id 
       ? this.tasks.updateTask(this.id, this.task) 
       : this.tasks.createTask(this.task);
 
-    // 2. Gọi subscribe 1 lần duy nhất
+    // ✅ TIẾN HÀNH LƯU VÀ ĐIỀU HƯỚNG VỀ TRANG CHỦ
     request$.subscribe({
       next: () => {
         alert(this.id ? 'Cập nhật thành công!' : 'Tạo công việc thành công!');

@@ -3,6 +3,9 @@
   max-width: 1200px;
   margin: 0 auto;
 
+  /* =========================================================
+     1. THANH CÔNG CỤ TÙY CHỈNH (DATE PICKER & TIÊU ĐỀ)
+  ========================================================= */
   .custom-toolbar {
     display: flex;
     justify-content: space-between;
@@ -10,7 +13,7 @@
     background: white;
     padding: 15px 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px;
 
     .back-btn {
@@ -20,27 +23,140 @@
       border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
-      &:hover { background: #e0e0e0; }
+      transition: background 0.2s;
+      
+      &:hover { 
+        background: #e0e0e0; 
+      }
     }
 
-    .date-picker-field {
-      width: 250px;
-      margin-bottom: -20px; 
+    .center-group {
+      .date-picker-field {
+        width: 250px;
+        margin-bottom: -20px; 
+      }
     }
 
-    .current-date-display {
-      margin: 0;
-      color: #3f51b5;
-      font-weight: 600;
+    .right-group {
+      .current-date-display {
+        margin: 0;
+        color: #3f51b5;
+        font-weight: 600;
+        font-size: 1.25rem;
+      }
     }
   }
 
+  /* =========================================================
+     2. KHUNG CHỨA LỊCH
+  ========================================================= */
   .calendar-card {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    // Đảm bảo chiều cao đủ lớn để scroll giờ
-    min-height: 600px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 600px;
+  }
+
+  /* =========================================================
+     3. GHI ĐÈ CSS CỦA FULLCALENDAR
+  ========================================================= */
+  ::ng-deep .fc {
+    --fc-border-color: #f0f3f4; 
+    --fc-now-indicator-color: #ea4335; 
+    --fc-today-bg-color: #f8fafd; 
+    
+    font-family: inherit;
+
+    .fc-timegrid-slot {
+      height: 3.5em; 
+    }
+
+    .fc-timegrid-axis-cushion, 
+    .fc-timegrid-slot-label-cushion {
+      font-size: 13px;
+      color: #5f6368;
+      font-weight: 500;
+    }
+
+    .fc-event {
+      border: none !important;
+      background: transparent !important;
+    }
+
+    .fc-timegrid-event-harness {
+      padding: 1px 4px; 
+    }
+
+    /* =====================================
+       4. THIẾT KẾ LẠI THẺ CÔNG VIỆC
+    ===================================== */
+    .modern-event {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 4px 8px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      
+      /* ✅ CẤM BÔI ĐEN CHỮ KHI NHẤN ĐÚP CHUỘT (DOUBLE CLICK) */
+      user-select: none;
+      -webkit-user-select: none;
+      
+      cursor: pointer; /* Báo hiệu có thể click được toàn bộ thẻ */
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      
+      /* Hiệu ứng khi nhấn giữ (kéo thả) */
+      &:active {
+        cursor: grabbing;
+        transform: scale(0.98);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .event-time {
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 2px;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        gap: 4px; /* Hở một chút giữa icon và thời gian */
+
+        /* ✅ ICON TRẠNG THÁI GỌN GÀNG HƠN */
+        .status-icon {
+          font-size: 12px;
+          line-height: 1;
+        }
+      }
+
+      .event-title {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.2;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      /* Màu cho Task Cần làm */
+      &.todo {
+        background-color: #fce8e6;
+        color: #c5221f;
+        border-left: 4px solid #c5221f;
+      }
+
+      /* Màu cho Task Đã xong */
+      &.done {
+        background-color: #e6f4ea;
+        color: #137333;
+        border-left: 4px solid #137333;
+        
+        .event-title {
+          text-decoration: line-through;
+          opacity: 0.8;
+        }
+      }
+    }
   }
 }
