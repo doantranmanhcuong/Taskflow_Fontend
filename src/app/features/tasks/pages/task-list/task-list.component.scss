@@ -1,5 +1,5 @@
 .task-container {
-  max-width: 1000px; /* Tăng chiều rộng lên một chút để chứa 2 cột */
+  max-width: 1000px;
   margin: 30px auto;
   padding: 0 15px;
 
@@ -18,27 +18,20 @@
     }
   }
 
-  /* ✅ BƯỚC 5: STYLE CHO 2 CỘT NẰM NGANG NHAU (GIỐNG TRELLO) */
   .board-layout {
     display: flex;
     gap: 24px;
     align-items: flex-start;
 
-    @media (max-width: 768px) {
-      flex-direction: column; /* Trên mobile sẽ xếp dọc lại */
-    }
+    @media (max-width: 768px) { flex-direction: column; }
 
     .column {
-      flex: 1; /* Hai cột chia đều 50/50 chiều rộng */
-      background: #f4f5f7; /* Thêm màu nền nhạt cho cả cột */
+      flex: 1; 
+      background: #f4f5f7; 
       border-radius: 12px;
       padding: 16px;
       
-      h3 {
-        margin: 0 0 16px;
-        color: #374151;
-        font-size: 18px;
-      }
+      h3 { margin: 0 0 16px; color: #374151; font-size: 18px; }
     }
   }
 
@@ -46,19 +39,34 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-height: 100px; /* Đảm bảo có không gian để thả ngay cả khi list rỗng */
+    min-height: 100px; 
   }
 
   /* ===================== TASK CARD ====================== */
   .task-card {
-    padding: 16px 20px;
+    position: relative;
+    padding: 16px 20px 16px 28px; 
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     background: white;
-    cursor: grab; /* ✅ Thêm con trỏ báo hiệu có thể kéo */
+    cursor: grab; 
+    overflow: hidden; 
+    transition: background-color 0.2s ease;
 
-    &:active {
-      cursor: grabbing; /* Con trỏ khi đang kéo */
+    &:active { cursor: grabbing; }
+
+    /* Vạch màu độc lập */
+    .color-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 6px;
+    }
+
+    &.pinned-card {
+      background-color: rgba(245, 158, 11, 0.06) !important;
+      border-color: #fcd34d !important;
     }
 
     .task-content {
@@ -67,25 +75,21 @@
       gap: 12px;
     }
 
-    mat-checkbox {
-      transform: scale(1.1);
-      margin-top: 4px;
-    }
+    mat-checkbox { transform: scale(1.1); margin-top: 4px; }
 
     .task-details {
       flex: 1;
 
-      h4 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
+      .task-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .pinned-badge { color: #f59e0b; font-size: 18px; width: 18px; height: 18px; }
+        h4 { margin: 0; font-size: 16px; font-weight: 600; }
       }
 
-      p {
-        margin: 4px 0 6px;
-        font-size: 14px;
-        color: #6b7280;
-      }
+      p { margin: 4px 0 6px; font-size: 14px; color: #6b7280; }
 
       .meta {
         display: flex;
@@ -94,84 +98,93 @@
         margin-top: 6px;
 
         small {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          background: #f3f4f6;
-          padding: 2px 8px;
-          font-size: 12px;
-          border-radius: 8px;
-          color: #555;
+          display: flex; align-items: center; gap: 4px; background: #f3f4f6;
+          padding: 2px 8px; font-size: 12px; border-radius: 8px; color: #555;
         }
 
-        .completed-date {
-          background: #e8f5e9;
-          color: #2e7d32;
-          font-weight: 500;
-        }
-
-        .original-due {
-          background: #fff3e0;
-          color: #f57c00;
-          font-weight: 500;
-        }
+        .completed-date { background: #e8f5e9; color: #2e7d32; font-weight: 500; }
+        .original-due { background: #fff3e0; color: #f57c00; font-weight: 500; }
       }
     }
 
     mat-card-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 8px;
-      padding: 0;
+      display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; padding: 0;
 
-      .edit-btn {
-        color: #2563eb;
-        font-size: 14px;
+      .pin-btn {
+        color: #9ca3af; transition: color 0.2s ease;
+        mat-icon { transform: rotate(45deg); transition: transform 0.2s ease; }
+        &:hover { color: #f59e0b; }
+        &.active-pin { color: #f59e0b; mat-icon { transform: rotate(0deg); } }
       }
 
-      .delete-btn {
-        color: #dc2626;
-      }
+      .edit-btn { color: #2563eb; font-size: 14px; }
+      .delete-btn { color: #dc2626; }
     }
 
     &.done {
-      background: #fafafa;
-      opacity: 0.9;
-
-      .task-details {
-        h4,
-        p {
-          text-decoration: line-through;
-          color: #777;
-        }
-      }
+      background: #fafafa; opacity: 0.9;
+      .task-details h4, .task-details p { text-decoration: line-through; color: #777; }
     }
   }
 
-  /* ✅ STYLE CHO HIỆU ỨNG KÉO THẢ TỪ ANGULAR CDK */
-  .cdk-drag-preview {
-    box-sizing: border-box;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.2), 0 8px 10px -1px rgba(0, 0, 0, 0.14);
-  }
-
-  .cdk-drag-placeholder {
-    opacity: 0;
-  }
-
-  .cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-
-  /* EMPTY */
   .empty-state {
-    padding: 30px;
-    text-align: center;
-    font-style: italic;
-    color: #aaa;
-    background: #f9fafb;
-    border-radius: 10px;
-    border: 1px dashed #ccc; /* Thêm viền đứt quãng để user biết có thể thả vào */
+    padding: 30px; text-align: center; font-style: italic; color: #aaa;
+    background: #f9fafb; border-radius: 10px; border: 1px dashed #ccc; 
+  }
+}
+
+/* =============================================================
+   🔥 DARK MODE OVERRIDE (FIX TÀNG HÌNH CHECKBOX) 🔥
+============================================================= */
+::ng-deep body.dark-theme {
+  .task-card {
+    background-color: #374151 !important;
+    border: 1px solid #4b5563 !important;
+
+    .task-details {
+      .task-title-wrapper h4 { color: #f9fafb !important; }
+      p { color: #d1d5db !important; }
+    }
+
+    .meta small { 
+      background-color: #4b5563 !important; 
+      color: #e5e7eb !important; 
+    }
+
+    &.pinned-card {
+      background-color: #423826 !important;
+      border-color: #d97706 !important;
+    }
+    
+    &.done { background-color: #1f2937 !important; }
+  }
+
+  /* =========================================
+     ÉP MÀU CHECKBOX CHO CHẾ ĐỘ TỐI
+  ========================================= */
+  .mat-mdc-checkbox {
+    /* 1. Ép các biến hệ thống */
+    --mdc-checkbox-unselected-icon-color: #d1d5db !important;
+    --mdc-checkbox-unselected-hover-icon-color: #ffffff !important;
+    --mdc-checkbox-selected-icon-color: #3b82f6 !important;
+    --mdc-checkbox-selected-checkmark-color: #ffffff !important;
+
+    /* 2. Ép cứng viền bao quanh (Cứu cánh nếu biến hệ thống bị liệt) */
+    .mdc-checkbox__background {
+      border: 2px solid #d1d5db !important;
+      background-color: transparent !important;
+    }
+  }
+
+  /* 3. Phá vỡ SVG bên trong ô chưa tick để nó không bị màu đen */
+  .mdc-checkbox__unselected-icon * {
+    fill: #d1d5db !important;
+    stroke: #d1d5db !important;
+  }
+
+  /* 4. Tô màu nền xanh khi ô đã được tick */
+  .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
   }
 }

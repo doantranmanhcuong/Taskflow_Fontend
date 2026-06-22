@@ -1,25 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common'; 
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon'; 
 import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
-import { TasksService } from '../../../../core/services/tasks.service';
+import { TasksService, Task } from '../../../../core/services/tasks.service'; 
 
 @Component({
   selector: 'app-task-edit',
   standalone: true,
-  imports: [FormsModule, NgIf, RouterLink, NavbarComponent],
+  imports: [FormsModule, NgIf, NgFor, RouterLink, NavbarComponent, MatIconModule], 
   templateUrl: './task-edit.component.html',
   styleUrls: ['./task-edit.component.scss']
 })
 export class TaskEditComponent implements OnInit {
   id: string | null = null;
-  task: any = { 
+  
+  // KHỞI TẠO DỮ LIỆU MẶC ĐỊNH
+  task: Partial<Task> = { 
     title: '', 
     description: '', 
     date: '',
-    time: '' 
+    time: '',
+    color: '#3b82f6', // Mặc định xanh dương
+    isPinned: false
   };
+
+  availableColors = [
+    { name: 'Xanh dương', value: '#3b82f6' },
+    { name: 'Đỏ (Quan trọng)', value: '#ef4444' },
+    { name: 'Xanh lá (Cá nhân)', value: '#10b981' },
+    { name: 'Vàng (Học tập)', value: '#f59e0b' },
+    { name: 'Tím (Khác)', value: '#8b5cf6' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,14 +44,16 @@ export class TaskEditComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     
     if (this.id) {
-      // ✅ GỌI API LẤY DỮ LIỆU CŨ KHI Ở CHẾ ĐỘ SỬA
+      // TRƯỜNG HỢP SỬA CÔNG VIỆC: Lấy dữ liệu cũ đổ lên form
       this.tasks.getTask(this.id).subscribe({
         next: (res) => {
           this.task = {
             title: res.title,
             description: res.description,
-            date: this.formatDateForInput(res.date),
-            time: this.formatTimeForInput(res.time)
+            date: this.formatDateForInput(res.date), // Format chuẩn ngày
+            time: this.formatTimeForInput(res.time), // Format chuẩn giờ
+            color: res.color || '#3b82f6', 
+            isPinned: res.isPinned || false
           };
         },
         error: (err) => {
@@ -47,48 +62,39 @@ export class TaskEditComponent implements OnInit {
         }
       });
     } else {
-      // ✅ XỬ LÝ KHỞI TẠO MẶC ĐỊNH CHO TẠO MỚI (TỪ LỊCH HOẶC NÚT TẠO)
+      // TRƯỜNG HỢP TẠO MỚI CÔNG VIỆC
       const params = this.route.snapshot.queryParams;
       this.task.date = params['date'] || this.getTodayDate();
       this.task.time = params['time'] || this.getCurrentTime();
     }
   }
 
+  // ✅ XỬ LÝ ĐỊNH DẠNG NGÀY CHO THẺ INPUT TYPE="DATE"
   private formatDateForInput(dateValue: any): string {
     if (!dateValue) return this.getTodayDate();
     
+    // Nếu BE trả về đúng định dạng YYYY-MM-DD
+    if (typeof dateValue === 'string' && dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateValue.substring(0, 10);
+    }
+
     try {
       const date = new Date(dateValue);
-      if (isNaN(date.getTime())) return this.getTodayDate();
-      
-      const year = date.getFullYear();
-      const month = ('0' + (date.getMonth() + 1)).slice(-2);
-      const day = ('0' + date.getDate()).slice(-2);
-      
-      return `${year}-${month}-${day}`;
-    } catch (error) {
-      return this.getTodayDate();
-    }
+      if (!isNaN(date.getTime())) {
+        return date.toISOString().split('T')[0];
+      }
+    } catch (error) {}
+    
+    return this.getTodayDate();
   }
 
+  // ✅ XỬ LÝ ĐỊNH DẠNG GIỜ CHO THẺ INPUT TYPE="TIME"
   private formatTimeForInput(timeValue: any): string {
     if (!timeValue) return this.getCurrentTime();
     
-    // Nếu time là string "HH:mm" hoặc "HH:mm:ss"
     if (typeof timeValue === 'string') {
-      const match = timeValue.match(/^(\d{1,2}):(\d{2})/);
-      if (match) {
-        const hours = ('0' + match[1]).slice(-2);
-        const minutes = ('0' + match[2]).slice(-2);
-        return `${hours}:${minutes}`;
-      }
-    }
-    
-    // Nếu time là Date object
-    if (timeValue instanceof Date) {
-      const hours = ('0' + timeValue.getHours()).slice(-2);
-      const minutes = ('0' + timeValue.getMinutes()).slice(-2);
-      return `${hours}:${minutes}`;
+      const match = timeValue.match(/^(\d{2}):(\d{2})/);
+      if (match) return `${match[1]}:${match[2]}`;
     }
     
     return this.getCurrentTime();
@@ -110,8 +116,6 @@ export class TaskEditComponent implements OnInit {
   }
 
   save() {
-    console.log('Saving task with time:', this.task);
-    
     if (!this.task.title?.trim()) {
       alert('Vui lòng nhập tiêu đề');
       return;
@@ -125,14 +129,12 @@ export class TaskEditComponent implements OnInit {
       ? this.tasks.updateTask(this.id, this.task) 
       : this.tasks.createTask(this.task);
 
-    // ✅ TIẾN HÀNH LƯU VÀ ĐIỀU HƯỚNG VỀ TRANG CHỦ
     request$.subscribe({
       next: () => {
         alert(this.id ? 'Cập nhật thành công!' : 'Tạo công việc thành công!');
         this.router.navigate(['/tasks']);
       },
       error: (err) => {
-        console.error('Save error:', err);
         alert('Lỗi: ' + (err.error?.message || err.message));
       }
     });

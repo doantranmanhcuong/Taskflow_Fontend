@@ -31,8 +31,22 @@
       ></textarea>
     </div>
 
+    <div class="color-picker-section form-group">
+      <label class="form-label">Phân loại màu sắc</label>
+      <div class="color-options">
+        <button *ngFor="let c of availableColors" 
+                type="button" 
+                class="color-circle" 
+                [style.backgroundColor]="c.value"
+                [class.selected]="task.color === c.value"
+                (click)="task.color = c.value"
+                [title]="c.name">
+          <mat-icon *ngIf="task.color === c.value">check</mat-icon>
+        </button>
+      </div>
+    </div>
+
     <div class="datetime-group">
-      <!-- Ngày -->
       <div class="form-group">
         <label for="date">Ngày *</label>
         <input 
@@ -50,7 +64,6 @@
         </div>
       </div>
 
-      <!-- Giờ -->
       <div class="form-group">
         <label for="time">Giờ</label>
         <input
@@ -75,7 +88,5 @@
       </button>
       <a routerLink="/tasks" class="cancel">Hủy</a>
     </div>
-
-   
   </form>
 </div>

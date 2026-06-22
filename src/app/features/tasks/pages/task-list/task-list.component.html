@@ -12,43 +12,38 @@
     
     <div class="column">
       <h3>Cần làm</h3>
-      <div 
-        class="task-list" 
-        id="todoList"
-        cdkDropList 
-        [cdkDropListData]="todo" 
-        (cdkDropListDropped)="drop($event)">
+      <div class="task-list" id="todoList" cdkDropList [cdkDropListData]="todo" (cdkDropListDropped)="drop($event)">
         
-        <mat-card 
-          class="task-card" 
-          *ngFor="let t of todo" 
-          appearance="outlined"
-          cdkDrag> <mat-card-content>
+        <mat-card class="task-card" *ngFor="let t of todo" appearance="outlined" [class.pinned-card]="t.isPinned" cdkDrag> 
+          
+          <div class="color-bar" [style.backgroundColor]="t.color || '#3b82f6'"></div>
+
+          <mat-card-content>
             <div class="task-content">
-              <mat-checkbox 
-                (change)="toggleTaskStatus(t)">
-              </mat-checkbox>
+              <mat-checkbox (change)="toggleTaskStatus(t)"></mat-checkbox>
               <div class="task-details">
-                <h4>{{ t.title }}</h4>
+                <div class="task-title-wrapper">
+                  <mat-icon *ngIf="t.isPinned" class="pinned-badge" matTooltip="Công việc đã ghim">push_pin</mat-icon>
+                  <h4>{{ t.title }}</h4>
+                </div>
+                
                 <p *ngIf="t.description">{{ t.description }}</p>
                 <div class="meta">
-                  <span *ngIf="t.priority" class="priority-badge priority-{{ t.priority }}">
-                    {{ t.priority | titlecase }}
-                  </span>
-                  
+                  <span *ngIf="t.priority" class="priority-badge priority-{{ t.priority }}">{{ t.priority | titlecase }}</span>
                   <small class="due-date">
                     📅 
                     <span *ngIf="t.date">{{ t.date | date: 'dd/MM/yyyy' }}</span>
                     <span *ngIf="!t.date && t.createdAt">{{ t.createdAt | date: 'dd/MM/yyyy' }}</span>
-                    <span *ngIf="t.time" style="margin-left: 8px;">
-                      ⏰ {{ t.time | slice:0:5 }}
-                    </span>
+                    <span *ngIf="t.time" style="margin-left: 8px;">⏰ {{ t.time | slice:0:5 }}</span>
                   </small>
                 </div>
               </div>
             </div>
           </mat-card-content>
           <mat-card-actions>
+            <button mat-icon-button (click)="togglePin(t, $event)" [class.active-pin]="t.isPinned" class="pin-btn" matTooltip="Ghim">
+              <mat-icon>push_pin</mat-icon>
+            </button>
             <a mat-button [routerLink]="['/tasks', t.id, 'edit']" class="edit-btn">Sửa</a>
             <button mat-icon-button (click)="deleteTask(t)" class="delete-btn" matTooltip="Xóa">
               <mat-icon>delete</mat-icon>
@@ -64,36 +59,25 @@
 
     <div class="column">
       <h3>Đã hoàn thành</h3>
-      <div 
-        class="task-list" 
-        id="doneList"
-        cdkDropList 
-        [cdkDropListData]="done" 
-        (cdkDropListDropped)="drop($event)">
+      <div class="task-list" id="doneList" cdkDropList [cdkDropListData]="done" (cdkDropListDropped)="drop($event)">
         
-        <mat-card 
-          class="task-card done" 
-          *ngFor="let t of done" 
-          appearance="outlined"
-          cdkDrag> <mat-card-content>
+        <mat-card class="task-card done" *ngFor="let t of done" appearance="outlined" [class.pinned-card]="t.isPinned" cdkDrag> 
+          
+          <div class="color-bar" [style.backgroundColor]="t.color || '#3b82f6'"></div>
+
+          <mat-card-content>
             <div class="task-content">
-              <mat-checkbox 
-                (change)="toggleTaskStatus(t)" 
-                [checked]="true">
-                Hoàn thành
-              </mat-checkbox>
+              <mat-checkbox (change)="toggleTaskStatus(t)" [checked]="true">Hoàn thành</mat-checkbox>
               <div class="task-details">
-                <h4 class="completed-title">{{ t.title }}</h4>
+                <div class="task-title-wrapper">
+                  <mat-icon *ngIf="t.isPinned" class="pinned-badge" matTooltip="Công việc đã ghim">push_pin</mat-icon>
+                  <h4 class="completed-title">{{ t.title }}</h4>
+                </div>
+                
                 <p *ngIf="t.description" class="completed-description">{{ t.description }}</p>
                 <div class="meta">
-                  <span *ngIf="t.priority" class="priority-badge priority-{{ t.priority }}">
-                    {{ t.priority | titlecase }}
-                  </span>
-                  
-                  <small *ngIf="t.completedAt" class="completed-date">
-                    ✅ Hoàn thành: {{ t.completedAt | date: 'dd/MM/yyyy HH:mm' }}
-                  </small>
-                  
+                  <span *ngIf="t.priority" class="priority-badge priority-{{ t.priority }}">{{ t.priority | titlecase }}</span>
+                  <small *ngIf="t.completedAt" class="completed-date">✅ Hoàn thành: {{ t.completedAt | date: 'dd/MM/yyyy HH:mm' }}</small>
                   <small *ngIf="t.date || t.time" class="original-due">
                     📅 
                     <span *ngIf="t.date">{{ t.date | date: 'dd/MM/yyyy' }}</span>
@@ -104,6 +88,9 @@
             </div>
           </mat-card-content>
           <mat-card-actions>
+            <button mat-icon-button (click)="togglePin(t, $event)" [class.active-pin]="t.isPinned" class="pin-btn" matTooltip="Ghim">
+              <mat-icon>push_pin</mat-icon>
+            </button>
             <a mat-button [routerLink]="['/tasks', t.id, 'edit']" class="edit-btn">Sửa</a>
             <button mat-icon-button (click)="deleteTask(t)" class="delete-btn" matTooltip="Xóa">
               <mat-icon>delete</mat-icon>
@@ -117,4 +104,5 @@
       </div>
     </div>
 
-  </div> </div>
+  </div> 
+</div>

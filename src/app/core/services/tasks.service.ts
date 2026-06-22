@@ -2,6 +2,21 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { catchError, map, of, tap } from 'rxjs';
 
+//  ĐỊNH NGHĨA INTERFACE TASK NGAY TẠI ĐÂY
+export interface Task {
+  id?: string | number;
+  title: string;
+  description?: string;
+  date: string;
+  time?: string;
+  status: string;
+  completedAt?: string | null;
+  userId?: number;
+  priority?: string;
+  color?: string;
+  isPinned?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -10,27 +25,21 @@ export class TasksService {
 
   getTasks() {
     return this.api.get<any>('/tasks').pipe(
-      map(response => {
-        return response?.data || [];
-      }),
+      map(response => response?.data || [])
     );
   }
 
-  // ✅ CẬP NHẬT: Xử lý dữ liệu trả về để bóc tách trường 'data'
   getTask(id: string | number) {
     return this.api.get<any>(`/tasks/${id}`).pipe(
-      map(response => {
-        // Backend trả về { data: { id: 1, title: '...', ... } }
-        return response?.data || response;
-      })
+      map(response => response?.data || response)
     );
   }
 
-  createTask(data: any) {
+  createTask(data: Partial<Task>) {
     return this.api.post<any>('/tasks', data);
   }
 
-  updateTask(id: string | number, data: any) {
+  updateTask(id: string | number, data: Partial<Task>) {
     return this.api.put<any>(`/tasks/${id}`, data);
   }
 
@@ -39,7 +48,6 @@ export class TasksService {
   }
 
   markAsCompleted(id: string | number) {
-    console.log(' Service: markAsCompleted for ID:', id);
     return this.api.patch<any>(`/tasks/${id}/complete`, {});
   }
 

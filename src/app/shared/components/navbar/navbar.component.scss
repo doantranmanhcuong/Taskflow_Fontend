@@ -32,9 +32,8 @@
   .links {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px; /* Giảm gap một chút để lấy chỗ cho nút Thống kê */
 
-    /* ✅ CSS cho nút Theme */
     .theme-btn {
       color: #4b5563;
       transition: all 0.2s;
@@ -86,7 +85,7 @@
       }
     }
 
-    button:not(.theme-btn) { /* Ẩn các class mặc định với nút icon */
+    button:not(.theme-btn) { 
       padding: 8px 16px;
       border: none;
       border-radius: 6px;
@@ -131,7 +130,7 @@
     }
 
     .links {
-      gap: 12px;
+      gap: 8px;
 
       .user-name {
         display: none; // Ẩn tên trên mobile
@@ -140,11 +139,11 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .navbar {
     .links {
       .nav-link:not(.user-link) {
-        display: none; // Ẩn text links, chỉ hiển thị icon/avatar
+        display: none; // Ẩn text links, chỉ hiển thị icon/avatar trên đt nhỏ
       }
 
       .user-link {

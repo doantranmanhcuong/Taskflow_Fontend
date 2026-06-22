@@ -21,17 +21,16 @@ html {
 html, body {
   height: 100%;
   margin: 0;
+  background-color: #f3f4f6; /* Nền xám nhạt cực đẹp cho Light Mode */
 }
 
 body {
   color-scheme: light;
-
-  // System-level colors from Angular Material 3
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* =======================================================
@@ -44,7 +43,7 @@ body, .task-card, .calendar-card, .navbar, .custom-toolbar, [class*="feature"], 
 
 /* 2. Giao diện khi Body bị gắn class .dark-theme (Tone Xám Xanh hiện đại) */
 body.dark-theme {
-  background-color: #111827 !important; /* Xám xanh tối, không bị đen kịt */
+  background-color: #111827 !important; /* Xám xanh tối sang trọng */
   color: #f9fafb !important;          
 
   /* =========================================
@@ -57,10 +56,12 @@ body.dark-theme {
   .card,              
   .feature-card,      
   .feature-item,      
-  .info-box {         
+  .info-box,
+  .edit-container,
+  .profile-container {         
     background-color: #1f2937 !important; 
     border-color: #374151 !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
     color: #f9fafb !important;
   }
 
@@ -95,13 +96,18 @@ body.dark-theme {
   }
 
   /* =========================================
-     THIẾT KẾ CARD CÔNG VIỆC
+     THIẾT KẾ CARD CÔNG VIỆC (TASK CARD)
   ========================================= */
   .task-card {
     background-color: #374151 !important; 
-    border-color: #4b5563 !important;
     color: #e5e7eb !important;
     
+    /* ✅ SỬA LỖI VẠCH MÀU TÀNG HÌNH */
+    border-top: 1px solid #4b5563 !important;
+    border-right: 1px solid #4b5563 !important;
+    border-bottom: 1px solid #4b5563 !important;
+    border-left-style: solid !important;
+
     h3, h4 { color: #ffffff !important; }
     p { color: #9ca3af !important; } 
     
@@ -110,10 +116,28 @@ body.dark-theme {
       color: #e5e7eb !important; 
     }
     
+    /* Thẻ khi được tick hoàn thành */
     &.done { 
       background-color: #1f2937 !important; 
       opacity: 0.6;
     }
+
+    /* ✅ ÁNH VÀNG CHO CARD ĐƯỢC GHIM (PINNED) TRONG DARK MODE */
+    &.pinned-card {
+      background-color: #423826 !important; 
+      border-top-color: #d97706 !important;
+      border-right-color: #d97706 !important;
+      border-bottom-color: #d97706 !important;
+    }
+  }
+
+  /* ✅ SỬA LỖI CHECKBOX TÀNG HÌNH TRONG DARK MODE */
+  .mdc-checkbox__background {
+    border-color: #9ca3af !important; /* Làm viền checkbox sáng lên để dễ nhìn */
+  }
+  .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+    background-color: #3b82f6 !important; 
+    border-color: #3b82f6 !important;
   }
 
   /* Đổi màu tiêu đề / Text chung */
@@ -124,7 +148,6 @@ body.dark-theme {
   /* =========================================
      SỬA LỖI CHỮ BỊ CHÌM TRONG FORM VÀ PROFILE
   ========================================= */
-  /* Sáng màu cho các thẻ Label, chữ nhỏ hướng dẫn */
   label, 
   .form-label, 
   small, 
@@ -133,14 +156,14 @@ body.dark-theme {
     color: #d1d5db !important; 
   }
 
-  /* Sáng màu chữ trong trang Profile */
   .profile-container, 
   .profile-card, 
   .user-info, 
-  .details-section {
+  .details-section,
+  .edit-container {
     color: #f9fafb !important;
     
-    span, p, strong, div {
+    span, p, strong, div, h2 {
       color: #f9fafb !important;
     }
   }

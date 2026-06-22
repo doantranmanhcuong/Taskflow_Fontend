@@ -10,7 +10,6 @@ import { NavbarComponent } from '../../../../shared/components/navbar/navbar.com
 import { TasksService } from '../../../../core/services/tasks.service';
 import { CommonModule } from '@angular/common';
 
-// ✅ BƯỚC 1: IMPORT DRAG DROP MODULE
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -20,7 +19,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
     CommonModule, RouterLink, NavbarComponent,
     MatCardModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule,
     MatSnackBarModule,
-    DragDropModule // ✅ THÊM VÀO ĐÂY
+    DragDropModule 
   ],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
@@ -47,6 +46,17 @@ export class TaskListComponent implements OnInit {
         this.done = [];
 
         if (list && Array.isArray(list)) {
+          // Sắp xếp: Ưu tiên ghim lên trước, sau đó sắp xếp theo thời gian
+          list.sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            
+            const timeA = new Date(a.date + 'T' + (a.time || '00:00')).getTime();
+            const timeB = new Date(b.date + 'T' + (b.time || '00:00')).getTime();
+            return timeA - timeB; 
+          });
+
+          // Phân loại vào 2 cột
           list.forEach(task => {
             const isCompleted = task.status?.toLowerCase() === 'completed';
             if (isCompleted) {
@@ -66,13 +76,10 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  // ✅ BƯỚC 2: HÀM XỬ LÝ SỰ KIỆN KÉO THẢ (DRAG & DROP)
   drop(event: CdkDragDrop<any[]>): void {
-    // Trường hợp 1: Người dùng kéo thả thay đổi vị trí TRONG CÙNG 1 CỘT (vd: đổi thứ tự ưu tiên)
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } 
-    // Trường hợp 2: Người dùng kéo thẻ SANG CỘT KHÁC (Cần làm -> Đã xong, hoặc ngược lại)
     else {
       transferArrayItem(
         event.previousContainer.data,
@@ -81,21 +88,17 @@ export class TaskListComponent implements OnInit {
         event.currentIndex,
       );
 
-      // Lấy data của task vừa được kéo thả
       const task = event.container.data[event.currentIndex];
       
-      // Nếu thả vào cột "Đã hoàn thành" (dựa vào id của DropList mà ta sẽ định nghĩa ở HTML)
       if (event.container.id === 'doneList') {
         this.callApiToUpdateStatus(task, true);
       } 
-      // Nếu thả vào cột "Cần làm"
       else if (event.container.id === 'todoList') {
         this.callApiToUpdateStatus(task, false);
       }
     }
   }
 
-  // ✅ BƯỚC 3: TÁCH LOGIC GỌI API RA THÀNH HÀM RIÊNG
   private callApiToUpdateStatus(task: any, isCompleting: boolean): void {
     const request$ = isCompleting 
       ? this.tasks.markAsCompleted(task.id) 
@@ -107,23 +110,70 @@ export class TaskListComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        // Có thể gọi lại loadTasks() để đồng bộ ngày giờ (completedAt) từ DB lên,
-        // Nhưng nếu muốn UI mượt hơn, bạn có thể tự cập nhật property completedAt ở client.
         this.loadTasks(); 
         this.showSuccess(successMessage);
       },
       error: (err: any) => {
         console.error('Toggle status error:', err);
         this.showError('Không thể cập nhật trạng thái');
-        this.loadTasks(); // Rollback UI nếu lỗi
+        this.loadTasks(); 
       }
     });
   }
 
-  // Vẫn giữ lại hàm toggle bằng checkbox phòng khi user muốn click
   toggleTaskStatus(task: any): void {
     const isCompleted = task.status?.toLowerCase() === 'completed';
-    this.callApiToUpdateStatus(task, !isCompleted); // Đảo ngược trạng thái hiện tại
+    this.callApiToUpdateStatus(task, !isCompleted); 
+  }
+
+  // ✅ CẬP NHẬT LẠI HÀM GHIM: ĐẢM BẢO ĐỒNG BỘ 100% VỚI BACKEND
+  togglePin(task: any, event: Event): void {
+    event.stopPropagation(); 
+    
+    // 1. Cập nhật giao diện ngay lập tức (Optimistic Update)
+    const newPinnedStatus = !task.isPinned;
+    task.isPinned = newPinnedStatus; 
+    this.sortLocalLists();
+
+    // 2. Tạo payload "sạch" để cập nhật, tránh gửi dư dữ liệu bị Gateway chặn
+    const payload = {
+      isPinned: newPinnedStatus,
+      title: task.title,
+      status: task.status,
+      // Có thể thêm các thuộc tính khác ở đây nếu cần, đảm bảo chúng trùng khớp với DTO
+    };
+
+    // 3. Gửi xuống Backend
+    this.tasks.updateTask(task.id, payload).subscribe({
+      next: () => {
+        console.log('Lưu trạng thái ghim vào Database thành công');
+        this.showSuccess(newPinnedStatus ? 'Đã ghim công việc' : 'Đã bỏ ghim');
+        // 🚀 Bắt buộc load lại danh sách mới từ DB để tránh mất dữ liệu khi chuyển trang
+        this.loadTasks(); 
+      },
+      error: (err: any) => {
+        console.error('Lỗi khi lưu ghim:', err);
+        // Hoàn tác nếu lỗi
+        task.isPinned = !newPinnedStatus; 
+        this.sortLocalLists();
+        this.showError('Không thể lưu trạng thái ghim vào Database');
+      }
+    });
+  }
+
+  // Hàm sắp xếp nội bộ ngay trên màn hình (không cần gọi API)
+  private sortLocalLists(): void {
+    const sortFn = (a: any, b: any) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      
+      const timeA = new Date(a.date + 'T' + (a.time || '00:00')).getTime();
+      const timeB = new Date(b.date + 'T' + (b.time || '00:00')).getTime();
+      return timeA - timeB; 
+    };
+
+    this.todo.sort(sortFn);
+    this.done.sort(sortFn);
   }
 
   deleteTask(task: any): void {  

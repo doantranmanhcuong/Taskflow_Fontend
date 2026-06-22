@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+
+<div class="stats-container">
+  <div class="header">
+    <h2>Thống kê công việc</h2>
+    
+    <div class="filter-group">
+      <label>Thời gian:</label>
+      <select [(ngModel)]="timeRange" (change)="onTimeRangeChange()" class="time-select">
+        <option value="week">7 Ngày qua</option>
+        <option value="month">30 Ngày qua</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="summary-cards">
+    <div class="card">
+      <div class="icon-wrap bg-blue"><mat-icon>assignment</mat-icon></div>
+      <div class="info">
+        <h3>Tổng số</h3>
+        <p class="number">{{ totalTasks }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon-wrap bg-green"><mat-icon>task_alt</mat-icon></div>
+      <div class="info">
+        <h3>Đã làm</h3>
+        <p class="number">{{ completedTasks }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon-wrap bg-red"><mat-icon>pending_actions</mat-icon></div>
+      <div class="info">
+        <h3>Cần làm</h3>
+        <p class="number">{{ pendingTasks }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon-wrap bg-yellow"><mat-icon>trending_up</mat-icon></div>
+      <div class="info">
+        <h3>Tỷ lệ</h3>
+        <p class="number">{{ completionRate }}%</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-card">
+      <h3>Tỷ lệ hoàn thành</h3>
+      
+      <div class="canvas-wrapper" *ngIf="totalTasks > 0; else noData">
+        <canvas baseChart
+          [data]="pieChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions">
+        </canvas>
+      </div>
+      
+      <ng-template #noData>
+        <div class="empty-chart">Không có công việc nào trong thời gian này</div>
+      </ng-template>
+    </div>
+  </div>
+</div>
